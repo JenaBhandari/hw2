@@ -9,6 +9,8 @@
 #include "db_parser.h"
 #include "product_parser.h"
 #include "util.h"
+#include "datastore.h"
+#include "mydatastore.h"
 
 using namespace std;
 struct ProdNameSorter {
@@ -29,7 +31,7 @@ int main(int argc, char* argv[])
      * Declare your derived DataStore object here replacing
      *  DataStore type to your derived type
      ****************/
-    DataStore ds;
+    MyDataStore ds ;
 
 
 
@@ -78,6 +80,7 @@ int main(int argc, char* argv[])
                     terms.push_back(term);
                 }
                 hits = ds.search(terms, 0);
+								//hits = ds->search(terms, 0);
                 displayProducts(hits);
             }
             else if ( cmd == "OR" ) {
@@ -87,7 +90,9 @@ int main(int argc, char* argv[])
                     term = convToLower(term);
                     terms.push_back(term);
                 }
+								//cout << "in or" << endl;
                 hits = ds.search(terms, 1);
+								//hits = ds->search(terms, 1);
                 displayProducts(hits);
             }
             else if ( cmd == "QUIT") {
@@ -101,15 +106,74 @@ int main(int argc, char* argv[])
             }
 	    /* Add support for other commands here */
 
+            //ADD username search_hit_number 
+            else if ( cmd == "ADD")
+            {
+              string username;
 
+							if (ss >> username)
+							{
+								int index;
 
+								if (ss >> index)
+								{
 
+									//cout << "Index: " << index << endl;
+									Product* newProduct = hits[index - 1];
+									ds.addToCart(username, newProduct);
+									//ds->addToCart(username, newProduct);
+								}
+								else
+								{
+									cout<< "Invalid Request"<< endl;
+								}
+							}
+							else
+							{
+								cout<< "Invalid Request"<< endl;
+							}
+
+            }
+            //VIEWCART username   
+            else if ( cmd == "VIEWCART")
+            {
+							string username;
+
+							if (ss >> username)
+							{
+
+								ds.viewCart(username);
+								//ds->viewCart(username);
+							}
+							else
+							{
+								cout<< "Invalid Request"<< endl;
+							}
+            }
+
+            //BUYCART username
+            else if ( cmd == "BUYCART")
+            {
+							string username;
+
+							if (ss >> username)
+							{
+								ds.buyCart(username);
+								//ds->buyCart(username);
+							}
+							else
+							{
+								cout<< "Invalid Request"<< endl;
+							}
+            }
             else {
                 cout << "Unknown command" << endl;
             }
         }
 
     }
+
+		//delete ds;
     return 0;
 }
 

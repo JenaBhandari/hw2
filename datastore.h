@@ -43,6 +43,7 @@ public:
     virtual void dump(std::ostream& ofile) = 0;
 
 
+
 };
 
 #endif

@@ -16,15 +16,38 @@ std::string convToLower(std::string src)
 std::set<std::string> parseStringToWords(string rawWords)
 {
 
+    std::set<std::string> words;
+
+    string word = "";
+		char space = ' ';
+		char period = '.';
+		char ap = '\'';
 
 
+    for (char c: rawWords)
+    {
+        if((c != space) && (c != period) && (c != ap))
+        {
+            word += c;
+        }
+        else
+        {
+            if (word.length() >= 2)
+            {
+                words.insert(word);
+            }
 
+            word = "";
+        }
 
+    }
 
+    if (word.length() >= 2)
+    {
+        words.insert(word);
+    } 
 
-
-
-
+    return words;
 }
 
 /**************************************************
